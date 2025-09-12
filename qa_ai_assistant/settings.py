@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'jira_xray_app',
+    'qa_api',
 ]
 
 MIDDLEWARE = [
@@ -127,10 +128,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Jira files
+# JIRA Configs
 JIRA_BASE_URL = os.getenv("JIRA_BASE_URL")
 XRAY_CLIENT_ID = os.getenv("XRAY_CLIENT_ID")
 XRAY_CLIENT_SECRET = os.getenv("XRAY_CLIENT_SECRET")
 
 JIRA_EMAIL= os.getenv("JIRA_EMAIL")
 JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN")
+
+#Later when I will switch to AI_PROVIDER = "openai"
+AI_PROVIDER = "mock"
+
+# LLM configs
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+DEFAULT_LLM_PROVIDER = os.getenv("DEFAULT_LLM_PROVIDER", "openai")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+MAX_CONTEXT_CHARS = int(os.getenv("MAX_CONTEXT_CHARS", "120000"))
