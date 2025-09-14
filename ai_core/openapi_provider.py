@@ -1,3 +1,4 @@
+# ai_core/openai_provider.py
 import os
 import json
 from typing import Any, Dict
@@ -12,48 +13,50 @@ class OpenAIProvider(BaseLLMProvider):
         self.model = getattr(settings, "OPENAI_MODEL", "gpt-4o-mini")
 
     def _call(self, prompt: str, temperature: float = 0.2) -> str:
-        """
-        Use Responses API if available, fallback to chat completions style.
-        Return text content.
-        """
+        """Internal wrapper for calling OpenAI and returning text."""
         try:
-            # Responses API style
             resp = self.client.responses.create(
                 model=self.model,
                 input=[{"role": "user", "content": prompt}],
                 temperature=temperature,
             )
-            # Many SDKs provide .output_text; handle robustly:
             if hasattr(resp, "output_text"):
                 return resp.output_text
-            # fallback
             text = ""
             if hasattr(resp, "output"):
-                # combine text content
                 for item in resp.output:
                     if "content" in item and isinstance(item["content"], list):
                         for c in item["content"]:
                             if c.get("type") == "output_text":
                                 text += c.get("text", "")
-            if text:
-                return text
-            # last resort: str()
-            return str(resp)
+            return text or str(resp)
         except Exception:
-            # fallback to chat completions path (older SDK style)
             resp = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=temperature,
             )
-            # attempt to extract message content
             try:
                 return resp.choices[0].message.content
             except Exception:
                 return str(resp)
 
-    def generate_test_cases(self, prompt: str, meta: Dict[str, Any] = None) -> str:
-        return self._call(prompt, temperature=0.2)
+    def generate(self, prompt: str, meta: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Unified entrypoint for generating artifacts.
+        Returns structured dict depending on meta["type"].
+        """
+        meta = meta or {}
+        type_ = meta.get("type")
 
-    def generate_test_plan(self, prompt: str, meta: Dict[str, Any] = None) -> str:
-        return self._call(prompt, temperature=0.1)
+        # Adjust temperature for variety
+        temperature = 0.2 if type_ == "test_cases" else 0.1
+        raw = self._call(prompt, temperature=temperature)
+
+        # Wrap output in consistent dict
+        if type_ == "test_cases":
+            return {"test_cases": raw}
+        elif type_ == "test_plan":
+            return {"test_plan": raw}
+        else:
+            return {"raw": raw}

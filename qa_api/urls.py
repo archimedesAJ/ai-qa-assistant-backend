@@ -4,6 +4,7 @@ from .views import (
     GenerateTestCasesFromDocument,
     GenerateTestPlanFromPrompt,
     GenerateTestPlanFromDocument,
+    TeamViewSet
 )
 
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
     path("generate/testcases/document/", GenerateTestCasesFromDocument.as_view()),
     path("generate/testplan/prompt/", GenerateTestPlanFromPrompt.as_view()),
     path("generate/testplan/document/", GenerateTestPlanFromDocument.as_view()),
+    path("teams/", TeamViewSet.as_view({'get': 'list'})),
 ]

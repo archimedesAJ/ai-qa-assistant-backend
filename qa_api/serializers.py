@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import Team
 
 class PromptSerializer(serializers.Serializer):
     user_story = serializers.CharField(required=False, allow_blank=True)
@@ -8,7 +9,16 @@ class PromptSerializer(serializers.Serializer):
     max_cases = serializers.IntegerField(required=False, default=8, min_value=1, max_value=50)
 
 class DocumentSerializer(serializers.Serializer):
-    document = serializers.FileField()
+    # Accept multiple files (BRD, SRS, etc.)
+    documents = serializers.ListField(
+        child=serializers.FileField(),
+        allow_empty=False
+    )
     app_context = serializers.CharField(required=False, allow_blank=True)
     section_hint = serializers.CharField(required=False, allow_blank=True)
     max_cases = serializers.IntegerField(required=False, default=8, min_value=1, max_value=50)
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ["id", "name", "description"]

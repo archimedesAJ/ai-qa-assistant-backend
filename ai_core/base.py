@@ -1,21 +1,23 @@
+# ai_core/base.py
 from abc import ABC, abstractmethod
-from typing import Any,  Dict
+from typing import Any, Dict
 
 class BaseLLMProvider(ABC):
-
     """
     Minimal provider interface.
-    Implementations should return structured strings (JSON) or Python dicts.
+    All providers should implement a single entrypoint.
+    Must return a structured dict containing test_cases, test_plan, and raw.
     """
 
     @abstractmethod
-    def generate_test_cases(self, prompt: str, meta: Dict[str, Any] = None) -> str:
+    def generate(self, prompt: str, meta: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Generate test artifacts from a prompt.
+        Should return a dict like:
+        {
+            "test_cases": [...],
+            "test_plan": {...},
+            "raw": "original unparsed text"
+        }
+        """
         pass
-
-
-    @abstractmethod
-    def generate_test_plan(self, prompt: str, meta: Dict[str, Any] = None ) -> str:
-        pass
-
-
-    
