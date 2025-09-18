@@ -4,7 +4,7 @@ class MockProvider:
     def __init__(self):
         pass
 
-    def generate_test_cases(self, prompt: str, meta: dict = None) -> dict:
+    def generate(self, prompt: str, meta: dict = None) -> dict:
         
         """
         Return mocked test artifacts instead of calling an actual LLM.

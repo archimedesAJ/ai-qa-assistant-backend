@@ -47,7 +47,7 @@ class OpenAIProvider(BaseLLMProvider):
         Returns structured dict depending on meta["type"].
         """
         meta = meta or {}
-        type_ = meta.get("type")
+        type_ = meta.get("type") 
 
         # Adjust temperature for variety
         temperature = 0.2 if type_ == "test_cases" else 0.1

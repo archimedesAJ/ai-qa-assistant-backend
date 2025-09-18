@@ -5,9 +5,13 @@ TEST_CASE_SCHEMA = """Return JSON with this exact shape:
       "id": "string",
       "title": "string",
       "priority": "P0|P1|P2",
-      "type": "Functional|Regression|Negative|Boundary|Security|API",
+      "type": "Functional|Regression|Negative|Boundary|Security|API|Performance|Usability",
       "preconditions": "string",
-      "steps": ["string"],
+      "steps": [
+        "Given ...",
+        "When ...",
+        "Then ..."
+      ],
       "expected_result": "string",
       "tags": ["string"]
     }
@@ -58,18 +62,20 @@ def build_requirement_text(
 
 def test_case_prompt(app_context: str, requirement_text: str, max_cases: int = 10) -> str:
     """
-    Build a prompt for generating structured test cases.
+    Build a prompt for generating structured test cases in Gherkin style.
     """
     return f"""
-You are a senior QA engineer. Use the application context and requirements to produce 
-high-quality, de-duplicated test cases with good coverage.
+You are a senior QA engineer. Use the application context and requirements 
+to produce high-quality, de-duplicated test cases with good coverage.
+
 
 {requirement_text}
 
 Instructions:
 - Generate up to {max_cases} test cases.
 - Include negative and boundary tests where applicable.
-- Use concise, actionable steps.
+- Write steps in **Gherkin style** (Given/When/Then).
+- Keep steps concise, actionable, and readable.
 - Strictly follow this JSON schema:
 {TEST_CASE_SCHEMA}
 """

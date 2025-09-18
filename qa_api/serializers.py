@@ -6,6 +6,7 @@ class PromptSerializer(serializers.Serializer):
     acceptance_criteria = serializers.CharField(required=False, allow_blank=True)
     feature_description = serializers.CharField(required=False, allow_blank=True)
     app_context = serializers.CharField(required=False, allow_blank=True)
+    team_id = serializers.IntegerField(required=True)
     max_cases = serializers.IntegerField(required=False, default=8, min_value=1, max_value=50)
 
 class DocumentSerializer(serializers.Serializer):
@@ -21,4 +22,4 @@ class DocumentSerializer(serializers.Serializer):
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ["id", "name", "description"]
+        fields = ["id", "name", "description", "context_info" ]

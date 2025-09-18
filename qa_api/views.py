@@ -22,7 +22,7 @@ def _assemble_context(validated):
     if team_id:
         try:
             team = Team.objects.get(id=team_id)
-            return team.description or "Generic QA context"
+            return team.context_info or "Generic QA context"
         except Team.DoesNotExist:
             pass
     return validated.get("app_context", "") or "Generic web/mobile application for feature-level QA."
@@ -37,6 +37,7 @@ class GenerateTestCasesFromPrompt(APIView):
         ac = s.validated_data.get("acceptance_criteria", "")
         feature_description = s.validated_data.get("feature_description", "")
         app_context = _assemble_context(s.validated_data)
+        print("App context:", app_context)
         max_cases = s.validated_data.get("max_cases", 8)
 
         requirement_text = build_requirement_text(user_story, ac, feature_description, "", app_context)

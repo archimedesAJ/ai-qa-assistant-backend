@@ -137,7 +137,7 @@ JIRA_EMAIL= os.getenv("JIRA_EMAIL")
 JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN")
 
 #Later when I will switch to AI_PROVIDER = "openai"
-AI_PROVIDER = "mock"
+AI_PROVIDER = "openai"  # or "mock" for testing without real LLM calls
 
 # LLM configs
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

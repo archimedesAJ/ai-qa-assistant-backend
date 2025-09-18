@@ -8,7 +8,7 @@ def get_provider():
     if _provider_instance is not None:
         return _provider_instance
 
-    provider_name = getattr(settings, "AI_PROVIDER", "mock")
+    provider_name = getattr(settings, "AI_PROVIDER", "openai")
     if provider_name == "openai":
         from .openapi_provider import OpenAIProvider
         _provider_instance = OpenAIProvider()
