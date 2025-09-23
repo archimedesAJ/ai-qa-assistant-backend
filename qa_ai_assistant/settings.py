@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'jira_xray_app',
     'qa_api',
+    'confluence',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,7 @@ XRAY_CLIENT_SECRET = os.getenv("XRAY_CLIENT_SECRET")
 
 JIRA_EMAIL= os.getenv("JIRA_EMAIL")
 JIRA_API_TOKEN=os.getenv("JIRA_API_TOKEN")
+JIRA_DOMAIN = os.getenv("JIRA_DOMAIN")  # e.g. your-domain.atlassian.net
 
 #Later when I will switch to AI_PROVIDER = "openai"
 AI_PROVIDER = "openai"  # or "mock" for testing without real LLM calls

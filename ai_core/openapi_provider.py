@@ -60,3 +60,40 @@ class OpenAIProvider(BaseLLMProvider):
             return {"test_plan": raw}
         else:
             return {"raw": raw}
+        
+    def chat_completion(self, system_prompt: str, question: str, temperature: float = 0.3) -> str:
+        """Call OpenAI Responses API and return a plain string"""
+        try:
+            resp = self.client.responses.create(
+                model=self.model,
+                input=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": question}
+                ],
+                temperature=temperature,
+                max_tokens=500
+            )
+            if hasattr(resp, "output_text"):
+                return resp.output_text
+            text = ""
+            if hasattr(resp, "output"):
+                for item in resp.output:
+                    if "content" in item and isinstance(item["content"], list):
+                        for c in item["content"]:
+                            if c.get("type") == "output_text":
+                                text += c.get("text", "")
+            return text or str(resp)
+        except Exception as e:
+            resp = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": question}
+                ],
+                temperature=temperature,
+            )
+            try:
+                return resp.choices[0].message.content
+            except Exception:
+                return str(resp)
+

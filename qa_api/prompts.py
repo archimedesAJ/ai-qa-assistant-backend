@@ -13,7 +13,8 @@ TEST_CASE_SCHEMA = """Return JSON with this exact shape:
         "Then ..."
       ],
       "expected_result": "string",
-      "tags": ["string"]
+      "tags": ["string"],
+      "automation_candidate": "Yes|No|Needs Analysis"
     }
   ]
 }
